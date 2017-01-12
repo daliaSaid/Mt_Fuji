@@ -1,0 +1,96 @@
+package com.pingidentity.halifax.fuji;
+
+import com.pingidentity.halifax.fuji.domain.Person;
+import com.pingidentity.halifax.fuji.domain.PersonRepository;
+import java.io.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Iterator;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+@SpringBootApplication
+public class Application implements CommandLineRunner {
+
+
+	@Autowired
+	private PersonRepository repository;
+
+	public static void main(final String[] args) {
+	SpringApplication.run(Application.class, args);
+	}
+
+	String getPeopleFromFile(){
+		FileInputStream fis;
+		String st = "";
+		try {
+			File file = new ClassPathResource("people.txt").getFile();
+			fis = new FileInputStream(file);
+			int content;
+			while ((content = fis.read()) != -1) {
+				char ch = (char) content;
+				st += ch;
+
+			}
+		}catch (FileNotFoundException e) {
+			repository.save(new Person("ErrorFNF", "LastName", 10, 50));
+		} catch (IOException e) {
+			repository.save(new Person("errorIO", "LastName", 10, 50));
+		}
+		return st;
+	}
+	String getJSONPeopleFromFile(){
+		String st = "";
+		JSONParser parser = new JSONParser();
+		try {     
+			File file = new ClassPathResource("people.json").getFile();
+            Object obj = parser.parse(new FileReader(file));
+
+            JSONObject jsonObject =  (JSONObject) obj;
+            //JSONObject people = jsonObject.getJSONObject("people");
+
+
+
+            // loop array
+            JSONArray people = (JSONArray) jsonObject.get("people");
+            Iterator<JSONObject> iterator = people.iterator();
+            while (iterator.hasNext()) {
+             	JSONObject personJSON = (JSONObject) iterator.next();
+ 	            String firstName = (String) personJSON.get("firstName");
+ 	            String lastName = (String) personJSON.get("lastName");
+	            String age = (String) personJSON.get("age");
+	            String height = (String) personJSON.get("height");
+	            st+=firstName+":"+lastName+":"+age+":"+height+"\n";
+        	}
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return st;
+    }	
+	@Override
+	public void run(String... strings) throws Exception {
+			String peopleToProcess = getPeopleFromFile() + "\n" +getJSONPeopleFromFile();
+			String[] splitContents = peopleToProcess.split("\n");
+			//repository.save(new Person(peopleToProcess, "LastName", 10, 50));
+			for (int i = 0; i < splitContents.length; i++) {
+				String[] splitEntry = splitContents[i].split(":");
+				if(splitEntry.length == 4){
+					repository.save(new Person(splitEntry[0], splitEntry[1], Integer.parseInt(splitEntry[2]), Integer.parseInt(splitEntry[3])));
+				}
+		   	 	
+			}
+
+	}
+
+}

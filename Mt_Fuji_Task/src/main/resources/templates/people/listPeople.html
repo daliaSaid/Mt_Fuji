@@ -1,0 +1,66 @@
+<html layout:decorator="layout">
+
+<div layout:fragment="content">
+
+    <table class="sortable table table-striped"  id="people_list">
+        <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Age</th>
+            <th>Height</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-th-each="person : ${people}">
+            <td class="message" data-th-text="${person.firstName}"></td>
+			<td class="message" data-th-text="${person.lastName}"></td>
+			<td class="message" data-th-text="${person.age}"></td>
+			<td class="message" data-th-text="${person.height}"></td>
+        </tr>
+        </tbody>
+    </table>
+        <a class="btn btn-primary"  onclick="addForm()">Add new Person</a>
+        <p>
+        	<form method="post" name="add_person_form" id="add_person_form" action="/people" role="form">
+	        	<table id="add_table" style="display:none;" class="table table-striped">
+		        <tr>
+		            <th>First Name</th>
+		            <th>Last Name</th>
+		            <th>Age</th>
+		            <th>Height</th>
+		            <th> Add </th>
+		            <th>Cancel</th>
+	       		</tr>
+				  <tr>
+				    <td><input type="text" id="first_name" name="first_name" value="" /></td>
+				    <td><input type="text" id="last_name" name="last_name" value="" /></td>
+				    <td><input type="text" id="age" name="age" value="" /></td>
+				    <td><input type="text" id="height" name="height" value="" /></td>
+				    <td>
+				    	<a onclick="addPerson()" class="ok">
+	                        <span class="fa-stack">
+	                            <i class="glyphicon glyphicon-ok"></i>
+	                        </span>
+	              	    </a>
+				    </td>
+				    <td>
+				    	<a onclick="removeForm()" class="remove">
+	                        <span class="fa-stack">
+	                            <i class="glyphicon glyphicon-remove"></i>
+	                        </span>
+	              	    </a>
+				    </td>
+				  </tr>
+			  </table>
+			  <input type="submit" style="visibility: hidden;"/>
+			</form>
+        </p>
+        <p id="error_msg">
+
+        </p>
+</div>
+
+
+</html>

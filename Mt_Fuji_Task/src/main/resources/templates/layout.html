@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="manager">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <!--<link rel="icon" href="../../favicon.ico"/>-->
+
+    <title>Mt. Fuji Task</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous"/>
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet"/>
+
+    <script src="sorttable.js"></script>
+
+    <script>
+    //Inserts a new person to the people table after the person is added to the database.
+    function insertPersonInTable(firstName, lastName, age, height) {
+        var table = document.getElementById("people_list");
+        var row = table.insertRow(table.rows.length);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        cell1.innerHTML = firstName;
+        cell2.innerHTML = lastName;
+        cell3.innerHTML = age;
+        cell4.innerHTML = height;
+    }
+    // Displays the add person form.
+    function addForm(){
+        document.getElementById("add_table").style.display = "";
+    }
+
+    // Hides the add person form.
+    function removeForm(){
+
+        document.getElementById("error_msg").innerHTML = "";
+        document.getElementById("add_table").style.display = "none";
+        document.getElementById("first_name").value = "";
+        document.getElementById("last_name").value = "";
+        document.getElementById("age").value = "";
+        document.getElementById("height").value = "";
+    }
+
+    // This function validates the input, only passing the person details to the controller if they are valid.
+    function addPerson(){
+
+        document.getElementById("error_msg").innerHTML = "";
+        var first_name = document.getElementById("first_name").value;
+        var last_name = document.getElementById("last_name").value;
+        var age = document.getElementById("age").value;
+        var height = document.getElementById("height").value;
+        var errors = "";
+        if(first_name == ""){
+            errors = errors.concat("First Name cannot be empty! ");
+        }
+        if(last_name == ""){
+            errors = errors.concat("Last Name cannot be empty! ");
+        }
+        if(!/^[a-zA-Z]*$/.test(first_name)){
+            errors = errors.concat("First Name must contain only letters! ");
+        }
+        if(!/^[a-zA-Z]*$/.test(last_name)){
+            errors = errors.concat("Last Name must contain only letters! ");
+        }
+        if(!/^[1-9][0-9]*$/.test(age)){
+            errors = errors.concat("Age has to be a number larger than 0! ");
+        }
+        if(!/^[1-9][0-9]*$/.test(height)){
+            errors = errors.concat("Height has to be a number larger than 0! ");
+        }
+
+        document.getElementById("error_msg").innerHTML = errors;
+        if(errors == ""){
+            document.getElementById("add_person_form").submit();
+        }
+        
+    }
+</script>
+</head>
+
+<body>
+
+<!-- Fixed navbar -->
+<!--<nav class="navbar navbar-default navbar-fixed-top">-->
+
+
+<div class="container">
+
+    <div layout:fragment="content">
+        <!-- ============================================================================ -->
+        <!-- This content is only used for static prototyping purposes (natural templates)-->
+        <!-- and is therefore entirely optional.                                          -->
+        <!-- ============================================================================ -->
+        <h1>Static content for prototyping purposes only</h1>
+
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Praesent scelerisque neque neque, ac elementum quam dignissim interdum.
+            Phasellus et placerat elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Praesent scelerisque neque neque, ac elementum quam dignissim interdum.
+            Phasellus et placerat elit.
+        </p>
+
+    </div>
+
+</div>
+<!-- /.container -->
+
+</body>
+
+</html>
